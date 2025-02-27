@@ -74,7 +74,8 @@ class BodyPart():
 
         for dendrite in dendrites:
             dendrite.neuron_or_body_part = self
-            dendrite.neuroreciever_type = Neurotransmitter.acetylcholine
+            if dendrite.neuroreciever_type != Neurotransmitter.acetylcholine:
+                raise NeuroError("All the Dendrites in a BodyPart must be acetylcholine.")
 
         self.thread = Thread(target=self.sum_and_exec_if_nec)
 
@@ -94,39 +95,3 @@ class BodyPart():
 
     def __getitem__(self, i):
         return self.dendrites[i]
-    
-def motivation():
-    print("I am too cool! *jumps*")
-
-legs = BodyPart([
-    Dendrite(Neurotransmitter.acetylcholine, 1)
-], 1, motivation)
-
-jump_neuron = Neuron(
-    [
-    Dendrite(Neurotransmitter.glutamate, 1),
-    Dendrite(Neurotransmitter.gaba, 1),
-    ],
-    legs[0],
-    1,
-    Neurotransmitter.acetylcholine
-)
-
-motivation_neuron = Neuron([
-    motivation_dendrite := Dendrite(Neurotransmitter.glutamate, 1)
-],
-jump_neuron[0],
-1,
-Neurotransmitter.glutamate)
-
-fear_neuron = Neuron([
-    fear_dendrite := Dendrite(Neurotransmitter.glutamate, 1),
-], jump_neuron[1], 1, Neurotransmitter.gaba)
-
-def cower_fear():
-    while True:
-        fear_dendrite.recieve(Neurotransmitter.glutamate)
-
-# fear_thread = Thread(target=cower_fear)
-# fear_thread.start()
-motivation_dendrite.recieve(Neurotransmitter.glutamate)
